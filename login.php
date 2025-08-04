@@ -1,3 +1,49 @@
+<?php
+session_start();
+require_once 'db.php';
+
+// Redirect if already logged in
+if (isset($_SESSION['user_id'])) {
+    header('Location: index.php');
+    exit;
+}
+
+$error_message = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = trim($_POST['username']);
+    $password = $_POST['password'];
+    
+    if (!empty($username) && !empty($password)) {
+        // Check user credentials
+        $stmt = $conn->prepare("SELECT id, username, password_hash, email, role FROM users WHERE username = ?");
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        if ($user = $result->fetch_assoc()) {
+            // Verify password
+            if (password_verify($password, $user['password_hash'])) {
+                // Set session variables
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['username'] = $user['username'];
+                $_SESSION['role'] = $user['role'];
+                $_SESSION['email'] = $user['email'];
+                
+                header('Location: index.php');
+                exit;
+            } else {
+                $error_message = 'Invalid username or password.';
+            }
+        } else {
+            $error_message = 'Invalid username or password.';
+        }
+        $stmt->close();
+    } else {
+        $error_message = 'Please enter both username and password.';
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -110,34 +156,22 @@
             <i class="fas fa-railway"></i>
             <h2>Admin Login</h2>
         </div>
-        <form class="login-form" id="loginForm" autocomplete="off">
+        <form class="login-form" method="POST" action="login.php">
             <div class="form-group">
                 <label for="username">Username</label>
-                <input type="text" id="username" name="username" required autofocus>
+                <input type="text" id="username" name="username" required autofocus value="<?php echo htmlspecialchars($_POST['username'] ?? ''); ?>">
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" required>
             </div>
-            <div class="login-error" id="loginError">Invalid username or password.</div>
+            <?php if ($error_message): ?>
+            <div class="login-error" style="display: block;"><?php echo htmlspecialchars($error_message); ?></div>
+            <?php endif; ?>
             <div class="form-actions">
                 <button type="submit">Login</button>
             </div>
         </form>
     </div>
-    <script>
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        var username = document.getElementById('username').value.trim();
-        var password = document.getElementById('password').value;
-        var errorDiv = document.getElementById('loginError');
-        if(username === 'admin' && password === 'admin123') {
-            errorDiv.style.display = 'none';
-            window.location.href = 'index.php';
-        } else {
-            errorDiv.style.display = 'block';
-        }
-    });
-    </script>
 </body>
 </html>

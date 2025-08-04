@@ -121,10 +121,49 @@ body {
     padding: 0.5rem;
     border-radius: 8px;
     transition: background 0.2s ease;
+    position: relative;
 }
 
 .profile-dropdown:hover {
     background: #f1f5f9;
+}
+
+.profile-dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    min-width: 150px;
+    z-index: 1001;
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    color: #334155;
+    text-decoration: none;
+    transition: background 0.2s ease;
+    border-radius: 6px;
+    margin: 0.25rem;
+}
+
+.dropdown-item:hover {
+    background: #f1f5f9;
+    color: #1a73e8;
+}
+
+.dropdown-item i {
+    font-size: 0.875rem;
 }
 
 .profile-avatar {
@@ -144,7 +183,6 @@ body {
     background: linear-gradient(135deg, #1a73e8, #4285f4);
     color: white;
     padding: 2rem 0 1.5rem;
-    margin-top: 50px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 

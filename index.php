@@ -1,5 +1,10 @@
 <?php
 require_once 'db.php';
+
+require_once 'auth.php';
+// Ensure user is logged in to access any page with navbar
+requireLogin();
+
 // Fetch dashboard stats
 $softwareCount = 0;
 $reportsCount = 0;
@@ -60,49 +65,7 @@ if ($result && $row = $result->fetch_assoc()) {
 
 <body>
     <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="navbar-brand">
-            <i class="fas fa-railway"></i>
-            <span class="brand-text">Beatle Analytics</span>
-        </div>
-
-        <div class="navbar-menu">
-      
-            <a href="index.php" class="nav-item active">
-                <i class="fas fa-tachometer-alt"></i>
-                <span>Dashboard</span>
-            </a>
-            <a href="software.php" class="nav-item">
-                <i class="fas fa-cogs"></i>
-                <span>Software Management</span>
-            </a>
-            <a href="subscriptions.php" class="nav-item">
-                <i class="fas fa-calendar-check"></i>
-                <span>Subscriptions</span>
-            </a>
-            <a href="reports.php" class="nav-item">
-                <i class="fas fa-chart-bar"></i>
-                <span>Reports & Analytics</span>
-            </a>
-            <a href="settings.php" class="nav-item">
-                <i class="fas fa-cog"></i>
-                <span>Settings</span>
-            </a>
-                  
-        </div>
-
-        <div class="navbar-profile">
-            <div class="notification-bell">
-                <i class="fas fa-bell"></i>
-                <span class="notification-badge" id="notificationCount">3</span>
-            </div>
-            <div class="profile-dropdown">
-                <img src="https://via.placeholder.com/40x40/1a73e8/ffffff?text=BA" alt="Profile" class="profile-avatar">
-                <span class="profile-name">Admin User</span>
-                <i class="fas fa-chevron-down"></i>
-            </div>
-        </div>
-    </nav>
+<?php include 'navbar.php'; ?>
 
     <!-- Header Stats -->
     <header class="header">
@@ -158,7 +121,7 @@ if ($result && $row = $result->fetch_assoc()) {
         <div id="dashboardPage" class="page active">
             <div class="dashboard-grid">
                 <!-- Quick Actions -->
-                <div class="dashboard-card">
+                <!-- <div class="dashboard-card">
                     <div class="card-header">
                         <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
                     </div>
@@ -172,31 +135,31 @@ if ($result && $row = $result->fetch_assoc()) {
                                 <i class="fas fa-map-marker-alt"></i>
                                 Add Station
                             </a>
-                            <!-- <button " onclick="exportAllData()">
+                            <button onclick="exportAllData()">
                                 <i class="fas fa-download"></i>
                                 Export Data
                             </button>
                             <button class="action-btn info" onclick="showPage('reports')">
                                 <i class="fas fa-chart-bar"></i>
                                 View Analytics
-                            </button> -->
+                            </button>
                         </div>
                     </div>
-                </div>
+                </div> -->
 
-                <!-- Recent Activity -->
-                <div class="dashboard-card">
+              
+                <!-- <div class="dashboard-card">
                     <div class="card-header">
                         <h3><i class="fas fa-clock"></i> Recent Activity</h3>
                     </div>
                     <div class="card-content">
                         <div class="activity-list" id="activityList">
-                            <!-- Activity items will be populated by JavaScript -->
+                           
                         </div>
                     </div>
-                </div>
+                </div> -->
 
-                <!-- Expiring Subscriptions -->
+               
                 <div class="dashboard-card full-width">
                     <div class="card-header">
                         <h3><i class="fas fa-exclamation-triangle"></i> Expiring Subscriptions</h3>

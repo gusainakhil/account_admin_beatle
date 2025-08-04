@@ -1,5 +1,8 @@
 <?php
 // Navigation bar for all pages
+require_once 'auth.php';
+requireLogin(); // Ensure user is logged in to access any page with navbar
+$currentUser = getCurrentUser();
 ?>
 <nav class="navbar">
     <div class="navbar-brand">
@@ -19,10 +22,10 @@
             <i class="fas fa-calendar-check"></i>
             <span>Stations & Subscriptions</span>
         </a>
-        <a href="reports.php" class="nav-item<?php if(basename($_SERVER['PHP_SELF'])=='reports.php') echo ' active'; ?>">
+        <!-- <a href="reports.php" class="nav-item<?php if(basename($_SERVER['PHP_SELF'])=='reports.php') echo ' active'; ?>">
             <i class="fas fa-chart-bar"></i>
             <span>Reports & Analytics</span>
-        </a>
+        </a> -->
         <a href="website-reports.php" class="nav-item<?php if(basename($_SERVER['PHP_SELF'])=='website-reports.php') echo ' active'; ?>">
             <i class="fas fa-cog"></i>
             <span>Website</span>
@@ -34,9 +37,14 @@
             <span class="notification-badge" id="notificationCount">3</span>
         </div>
         <div class="profile-dropdown">
-            <img src="https://via.placeholder.com/40x40/1a73e8/ffffff?text=BA" alt="Profile" class="profile-avatar">
-            <span class="profile-name">Admin User</span>
-            <i class="fas fa-chevron-down"></i>
+            <img src="https://via.placeholder.com/40x40/1a73e8/ffffff?text=<?php echo strtoupper(substr($currentUser['username'], 0, 2)); ?>" alt="Profile" class="profile-avatar">
+            <span class="profile-name"><?php echo htmlspecialchars($currentUser['username']); ?></span>
+            <div class="dropdown-menu">
+                <a href="logout.php" class="dropdown-item">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </a>
+            </div>
         </div>
     </div>
 </nav>

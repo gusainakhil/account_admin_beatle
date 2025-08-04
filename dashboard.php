@@ -1,4 +1,7 @@
 <?php
+session_start();
+require_once 'auth.php';
+requireLogin(); // Ensure user is logged in to access any page with navbar
 require_once 'db.php';
 // Fetch dashboard stats
 $softwareCount = 0;
