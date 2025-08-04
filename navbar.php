@@ -27,7 +27,7 @@ $currentUser = getCurrentUser();
             <span>Reports & Analytics</span>
         </a> -->
         <a href="website-reports.php" class="nav-item<?php if(basename($_SERVER['PHP_SELF'])=='website-reports.php') echo ' active'; ?>">
-            <i class="fas fa-cog"></i>
+            <i class="fas fa-chart-bar"></i>
             <span>Website</span>
         </a>
     </div>
