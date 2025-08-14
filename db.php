@@ -1,9 +1,9 @@
 <?php
 // Database connection code
 $host = '160.187.5.190';
-$dbname = 'pmcbeatlemeco_main_dashboard';
-$username = 'pmcbeatlemeco_user';
-$password = 'Aksh@9412';
+$dbname = 'reports_Location_record';
+$username = 'reports_Location_record';
+$password = 'FCZkJJ4^kc?oD&#,';
 $conn = new mysqli($host, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
@@ -26,3 +26,4 @@ $conn->set_charset("utf8");
 // echo "Connected successfully";
 
 ?>
+x

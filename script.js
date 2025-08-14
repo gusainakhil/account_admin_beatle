@@ -1666,34 +1666,6 @@ function renderSearchResults(results, searchTerm) {
 // CRUD Operations
 function addSoftware() {
     openModal('addSoftwareModal');
-    
-    // Handle form submission
-    const form = document.getElementById('addSoftwareForm');
-    form.onsubmit = function(e) {
-        e.preventDefault();
-        
-        const softwareName = document.getElementById('softwareName').value;
-        const shortName = document.getElementById('softwareShortName').value;
-        const color = document.getElementById('softwareColor').value;
-        const category = document.getElementById('softwareCategory').value;
-        const description = document.getElementById('softwareDescription').value;
-        
-        // Add to dashboard data
-        DASHBOARD_DATA[shortName] = {
-            name: softwareName,
-            zones: {}
-        };
-        
-        // Show success message
-        showToast(`${softwareName} software added successfully!`, 'success');
-        closeModal('addSoftwareModal');
-        form.reset();
-        
-        // Refresh the current page if it's software page
-        if (currentPage === 'software') {
-            loadSoftwarePage();
-        }
-    };
 }
 
 function addZone(softwareKey) {

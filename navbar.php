@@ -1,8 +1,8 @@
 <?php
 // Navigation bar for all pages
-require_once 'auth.php';
-requireLogin(); // Ensure user is logged in to access any page with navbar
-$currentUser = getCurrentUser();
+// require_once 'auth.php';
+// requireLogin(); // Ensure user is logged in to access any page with navbar
+// $currentUser = getCurrentUser();
 ?>
 <nav class="navbar">
     <div class="navbar-brand">
@@ -32,12 +32,12 @@ $currentUser = getCurrentUser();
         </a>
     </div>
     <div class="navbar-profile">
-        <div class="notification-bell">
-            <i class="fas fa-bell"></i>
-            <span class="notification-badge" id="notificationCount">3</span>
-        </div>
+        <!--<div class="notification-bell">-->
+        <!--    <i class="fas fa-bell"></i>-->
+        <!--    <span class="notification-badge" id="notificationCount">3</span>-->
+        <!--</div>-->
         <div class="profile-dropdown">
-            <img src="https://via.placeholder.com/40x40/1a73e8/ffffff?text=<?php echo strtoupper(substr($currentUser['username'], 0, 2)); ?>" alt="Profile" class="profile-avatar">
+            <img src="https://www.beatleanalytics.com/assets/frontend/img/favicon.png" alt="Profile" class="profile-avatar">
             <span class="profile-name"><?php echo htmlspecialchars($currentUser['username']); ?></span>
             <div class="dropdown-menu">
                 <a href="logout.php" class="dropdown-item">

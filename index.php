@@ -49,6 +49,13 @@ $result = $conn->query($sql);
 if ($result && $row = $result->fetch_assoc()) {
     $stationsCount = $row['cnt'];
 }
+//website expiring count within 30 days
+$sql = "SELECT COUNT(*) as cnt FROM website_reports WHERE DATEDIFF(end_date, CURDATE()) BETWEEN 0 AND 120";
+$result = $conn->query($sql);
+if ($result && $row = $result->fetch_assoc()) {
+    $websiteExpiringCount = $row['cnt'];
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -84,6 +91,15 @@ if ($result && $row = $result->fetch_assoc()) {
                         <span class="stat-label">Software Products</span>
                     </div>
                 </div>
+                <div class="stat-card info">
+                    <div class="stat-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div class="stat-content">
+                        <span class="stat-number" id="totalStations"><?php echo $stationsCount; ?></span>
+                        <span class="stat-label">Total Stations</span>
+                    </div>
+                </div>
                 <div class="stat-card success">
                     <div class="stat-icon">
                         <i class="fas fa-chart-line"></i>
@@ -102,15 +118,18 @@ if ($result && $row = $result->fetch_assoc()) {
                         <span class="stat-label">Expiring Soon</span>
                     </div>
                 </div>
-                <div class="stat-card info">
+                <div class="stat-card warning" style="cursor:pointer;" onclick="window.location.href='website-reports.php'">
                     <div class="stat-icon">
-                        <i class="fas fa-map-marker-alt"></i>
+                        <i class="fas fa-exclamation-triangle"></i>
                     </div>
-                    <div class="stat-content">
-                        <span class="stat-number" id="totalStations"><?php echo $stationsCount; ?></span>
-                        <span class="stat-label">Total Stations</span>
+                    <div class="stat-content"></div>
+                        <span class="stat-number" id="expiringReports"><?php echo $websiteExpiringCount; ?></span>
+                        <span class="stat-label">Website Expiring</span>
                     </div>
                 </div>
+                </div>
+                    
+                
             </div>
         </div>
     </header>
@@ -163,7 +182,7 @@ if ($result && $row = $result->fetch_assoc()) {
                 <div class="dashboard-card full-width">
                     <div class="card-header">
                         <h3><i class="fas fa-exclamation-triangle"></i> Expiring Subscriptions</h3>
-                        <button class="btn-small" onclick="checkAllExpiry()">Refresh</button>
+                        <!--<button class="btn-small" onclick="checkAllExpiry()">Refresh</button>-->
                     </div>
                     <div class="card-content">
                         <div class="expiry-table-container">
@@ -197,7 +216,7 @@ LEFT JOIN
 LEFT JOIN 
 	software soft ON st.software_id =soft.id
 WHERE 
-    DATEDIFF(st.expiry_date, CURDATE()) BETWEEN 0 AND 30
+    DATEDIFF(st.expiry_date, CURDATE()) BETWEEN 0 AND 120
 ORDER BY 
     st.expiry_date ASC;";
                                     $result = $conn->query($sql);

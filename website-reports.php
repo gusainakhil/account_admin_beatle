@@ -102,60 +102,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['updateWebsiteId'])) {
                 </button>
             </div>
         </div>
-    <!-- Update Website Modal -->
-    <div id="updateWebsiteModal" class="modal">
-        <div class="modal-content large-modal">
-            <div class="modal-header">
-                <h3><i class="fas fa-edit"></i> Update Website Report</h3>
-                <span class="close" onclick="closeModal('updateWebsiteModal')">&times;</span>
-            </div>
-            <div class="modal-body">
-                <form id="updateWebsiteForm" method="POST">
-                    <input type="hidden" id="updateWebsiteId" name="updateWebsiteId">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="updateWebsiteUrl"><i class="fas fa-link"></i> Website URL</label>
-                            <input type="url" id="updateWebsiteUrl" name="updateWebsiteUrl" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="updateWebsiteStartDate"><i class="fas fa-calendar-plus"></i> Start Date</label>
-                            <input type="date" id="updateWebsiteStartDate" name="updateWebsiteStartDate" required>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="updateWebsiteEndDate"><i class="fas fa-calendar-minus"></i> End Date</label>
-                            <input type="date" id="updateWebsiteEndDate" name="updateWebsiteEndDate" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="updateWebsitePrice"><i class="fas fa-rupee-sign"></i> Price</label>
-                            <input type="number" id="updateWebsitePrice" name="updateWebsitePrice" required>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="updateEmailService"><i class="fas fa-envelope"></i> Email Service Enabled</label>
-                            <select id="updateEmailService" name="updateEmailService" required>
-                                <option value="yes">Yes</option>
-                                <option value="no">No</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="updateWebsiteStatus"><i class="fas fa-toggle-on"></i> Website Status</label>
-                            <select id="updateWebsiteStatus" name="updateWebsiteStatus">
-                                <option value="active">Active</option>
-                                <option value="inactive">Inactive</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-actions" style="text-align:right;">
-                        <button type="submit" class="btn btn-success"><i class="fas fa-check"></i> Update</button>
-                        <button type="button" class="btn btn-secondary" onclick="closeModal('updateWebsiteModal')"><i class="fas fa-times"></i> Cancel</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
         <div class="website-reports-table-container card">
             <h3 class="section-title"><i class="fas fa-table"></i> All Website Reports</h3>
             <table class="data-table modern-table">
@@ -167,8 +113,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['updateWebsiteId'])) {
                         <th>Price</th>
                         <th>Email Service</th>
                         <th>Status</th>
+                        <th>Days Left</th>
                         <th>Actions</th>
-
                     </tr>
                 </thead>
                 <tbody>
@@ -177,29 +123,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['updateWebsiteId'])) {
                     if ($result && $result->num_rows > 0) {
                         while ($row = $result->fetch_assoc()) {
                             $rowClass = $row['status'] === 'active' ? 'active-row' : 'inactive-row';
-                            echo '<tr class="' . $rowClass . '">';
+
+                            // Calculate days left
+                            $today = new DateTime();
+                            $endDate = new DateTime($row['end_date']);
+                            $interval = $today->diff($endDate);
+                            $daysLeft = $interval->invert ? 0 : $interval->days;
+
+                            echo '<tr  class="' . $rowClass . '">';
                             echo '<td><a href="' . htmlspecialchars($row['url']) . '" target="_blank">' . htmlspecialchars($row['url']) . '</a></td>';
                             echo '<td>' . htmlspecialchars($row['start_date']) . '</td>';
                             echo '<td>' . htmlspecialchars($row['end_date']) . '</td>';
                             echo '<td><span class="badge badge-info">₹' . htmlspecialchars($row['price']) . '</span></td>';
                             echo '<td>' . ($row['email_service'] === 'yes' ? '<span class="badge badge-success">Yes</span>' : '<span class="badge badge-danger">No</span>') . '</td>';
                             echo '<td>' . ($row['status'] === 'active' ? '<span class="badge badge-success">Active</span>' : '<span class="badge badge-secondary">Inactive</span>') . '</td>';
+                            echo '<td >' . ($daysLeft > 0 ? $daysLeft . ' days' : '<span class="badge badge-danger">Expired</span>') . '</td>';
                             echo '<td>';
-                            echo '<button class="btn btn-sm btn-primary" onclick="showUpdateWebsiteModal(' .
-                                json_encode($row['id']) . ', '
-                                . json_encode($row['url']) . ', '
-                                . json_encode($row['start_date']) . ', '
-                                . json_encode($row['end_date']) . ', '
-                                . json_encode($row['price']) . ', '
-                                . json_encode($row['email_service']) . ', '
-                                . json_encode($row['status']) .
-                                ')"><i class="fas fa-edit"></i></button> ';
+                            echo '<a class="btn btn-sm btn-primary" href="edit_website_report.php?id=' . $row['id'] . '"><i class="fas fa-edit"></i></a> ';
                             echo '<button class="btn btn-sm btn-danger"><i class="fas fa-sync"></i></button>';
                             echo '</td>';
                             echo '</tr>';
                         }
                     } else {
-                        echo '<tr><td colspan="7">No website reports found.</td></tr>';
+                        echo '<tr><td colspan="8">No website reports found.</td></tr>';
                     }
                     ?>
                 </tbody>
